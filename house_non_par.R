@@ -36,7 +36,7 @@ house_pred_nafill$GarageArea[is.na(house_pred_nafill$GarageArea)] <- mean(house_
 # feature enginering
 
 # choosing variables OverallQual, GrLivArea, GarageArea and OpenPorchSF
-house_train_sub <- house_train[, c(18, 47, 63, 68)]
+house_train_sub <- house_train[, c(18, 47, 63, 68, ncol(house_train))]
 house_pred_sub <- house_pred[, c(18, 47, 63, 68)]
 
 

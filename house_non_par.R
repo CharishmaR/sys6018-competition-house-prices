@@ -1,0 +1,77 @@
+# sys6018-competition-house-prices
+# https://www.kaggle.com/c/house-prices-advanced-regression-techniques
+
+library(readr)  
+library(dplyr) 
+library(caret)
+
+house_train <- read_csv("train.csv")
+house_pred <- read_csv("test.csv")
+# sample <- read_csv("sample_submission.csv")
+
+# After preliminary examination of data set and its descriptions, we first study the relationship between house areas and SalePrice. Specifically, we look at variables LotArea, GrLivArea, GarageArea, OpenPorchSF and PoolArea. 
+
+attach(house_train)
+par(mfrow = c(2, 3))
+plot(LotArea, SalePrice)
+plot(GrLivArea, SalePrice)
+plot(GarageArea, SalePrice)
+plot(OpenPorchSF, SalePrice)
+plot(PoolArea, SalePrice)
+
+# We observe a moderately strong positive linear relationship between GrLivArea and SalePrice, OpenPorchSF and SalePrice as well as GarageArea and SalePrice. 
+
+
+# filling NA values
+house_pred_nafill <- house_pred
+house_pred_nafill$GarageArea[is.na(house_pred_nafill$GarageArea)] <- mean(house_train$GarageArea)
+
+
+# CV
+# train <- createDataPartition(house_train$SalePrice, p=0.6, list=FALSE)
+# training <- house_train[train, ]
+# testing <- house_train[-train, ]
+
+
+# feature enginering
+
+# choosing variables OverallQual, GrLivArea, GarageArea and OpenPorchSF
+house_train_sub <- house_train[, c(18, 47, 63, 68)]
+house_pred_sub <- house_pred[, c(18, 47, 63, 68)]
+
+
+
+# Euclidean distance
+edist <- function(a, b){
+  d = 0
+  for (i in (1:(length(a) - 1))) {
+    d = d + (a[[i]] - b[[i]]) ^ 2
+  }
+  return(sqrt(d))
+}
+
+
+# KNN
+knn <- function(train, k, pred){
+  price_all <- c()  
+  
+  for (i in 1:nrow(pred)) {   
+    distances =c()  
+    saleprices = c()
+    
+    for (j in 1:nrow(train)) {
+      distances <- c(distances, edist(train[j,], pred[i,]))
+      saleprices <- c(saleprices, train[j, ]$SalePrice)
+    }
+    
+    euclidean <- data.frame(distances, saleprices)
+    euclidean <- euclidean[order(distances), ][1:k, ]
+    price_all <- c(price_all, mean(euclidean[, 2]))
+  }
+  return(price_all)
+}
+
+k_output = sqrt(nrow(house_pred))
+house_output <- data.frame(house_pred$Id, knn(house_train_sub, k_output, house_pred_sub))
+
+write.table(house_output, file = "house_nonpar.csv", row.names=F, col.names=c("Id", "SalePrice"), sep=",")

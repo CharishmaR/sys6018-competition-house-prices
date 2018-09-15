@@ -7,17 +7,10 @@ library(caret)
 
 house_train <- read_csv("train.csv")
 house_pred <- read_csv("test.csv")
-# sample <- read_csv("sample_submission.csv")
 
 # After preliminary examination of data set and its descriptions, we first study the relationship between house areas and SalePrice. Specifically, we look at variables LotArea, GrLivArea, GarageArea, OpenPorchSF and PoolArea. 
 
 attach(house_train)
-par(mfrow = c(2, 3))
-plot(LotArea, SalePrice)
-plot(GrLivArea, SalePrice)
-plot(GarageArea, SalePrice)
-plot(OpenPorchSF, SalePrice)
-plot(PoolArea, SalePrice)
 
 # We observe a moderately strong positive linear relationship between GrLivArea and SalePrice, OpenPorchSF and SalePrice as well as GarageArea and SalePrice. 
 

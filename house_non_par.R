@@ -26,20 +26,38 @@ plot(PoolArea, SalePrice)
 house_pred_nafill <- house_pred
 house_pred_nafill$GarageArea[is.na(house_pred_nafill$GarageArea)] <- mean(house_train$GarageArea)
 
+# Normalizing some Data
+house_train$QualNorm <- OverallQual/mean(OverallQual)
+house_train$GrLivAreaNorm <- GrLivArea/mean(GrLivArea)
 
 # CV
-# train <- createDataPartition(house_train$SalePrice, p=0.6, list=FALSE)
-# training <- house_train[train, ]
-# testing <- house_train[-train, ]
-
+train <- createDataPartition(house_train$SalePrice, p=0.7, list=FALSE)
+training <- house_train[train, ]
+testing <- house_train[-train, ]
 
 # feature enginering
 
 # choosing variables OverallQual, GrLivArea, GarageArea and OpenPorchSF
-house_train_sub <- house_train[, c(18, 47, 63, 68, ncol(house_train))]
-house_pred_sub <- house_pred[, c(18, 47, 63, 68)]
+
+#house_train_sub <- house_train[, c(18, 47, 63, 68, ncol(house_train))]
+house_train_sub <- select(training,OverallQual,GrLivArea, SalePrice)
+house_pred_sub <- select(testing,OverallQual,GrLivArea, SalePrice)
+
+k_output = floor(sqrt(nrow(house_pred_sub)))
+reg_output <- data.frame(house_pred_sub, knn(house_train_sub, k_output, house_pred_sub))
 
 
+# testing the normal method vs with normalized data
+norm_train_sub <- select(training,QualNorm,GrLivAreaNorm,SalePrice)
+norm_test_sub <- select(testing,QualNorm,GrLivAreaNorm,SalePrice)
+norm_output <- data.frame(norm_test_sub, knn(norm_train_sub, k_output, norm_test_sub))
+reg_output$reg_output_resid = abs(reg_output$SalePrice - reg_output$knn.house_train_sub..k_output..house_pred_sub.)
+norm_output$norm_output_resid = abs(norm_output$SalePrice - norm_output$knn.norm_train_sub..k_output..norm_test_sub.)
+
+reg_ss = sum(reg_output$reg_output_resid)
+norm_ss = sum(norm_output$norm_output_resid)
+
+norm_ss/reg_ss
 
 # Euclidean distance
 edist <- function(a, b){

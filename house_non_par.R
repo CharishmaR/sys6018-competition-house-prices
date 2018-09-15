@@ -22,6 +22,9 @@ house_pred_nafill$GarageArea[is.na(house_pred_nafill$GarageArea)] <- mean(house_
 # Normalizing some Data
 house_train$QualNorm <- OverallQual/mean(OverallQual)
 house_train$GrLivAreaNorm <- GrLivArea/mean(GrLivArea)
+house_train$OpenPorchNorm <- as.numeric(OpenPorchSF > 0)
+#house_train$GarageAreaNorm <- GarageArea/mean(GarageAreaNorm)
+
 
 house_pred$QualNorm <- house_pred$OverallQual/mean(house_pred$OverallQual)
 house_pred$GrLivAreaNorm <- house_pred$GrLivArea/mean(house_pred$GrLivArea)

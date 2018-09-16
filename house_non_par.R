@@ -74,10 +74,10 @@ house_pred$GrLivAreaNorm <- (house_pred$GrLivArea - mean(house_pred$GrLivArea))/
 
 
 # CV
-set.seed(3)
-train <- createDataPartition(house_train$SalePrice, p=0.7, list=FALSE)
-training <- house_train[train, ]
-testing <- house_train[-train, ]
+# set.seed(3)
+# train <- createDataPartition(house_train$SalePrice, p=0.7, list=FALSE)
+# training <- house_train[train, ]
+# testing <- house_train[-train, ]
 
 # feature enginering
 
@@ -88,8 +88,8 @@ testing <- house_train[-train, ]
 
 
 # testing with normalized data
-norm_train_sub <- select(training, QualNorm, GrLivAreaNorm, Neighborhood, SalePrice)
-norm_test_sub <- select(testing, QualNorm, GrLivAreaNorm, Neighborhood)
+norm_train_sub <- select(house_train, QualNorm, GrLivAreaNorm, Neighborhood, SalePrice)
+norm_test_sub <- select(house_pred, QualNorm, GrLivAreaNorm, Neighborhood)
 norm_output <- data.frame(testing, knn(norm_train_sub, norm_test_sub))
 
 # Below are some things for testing out the model with CV

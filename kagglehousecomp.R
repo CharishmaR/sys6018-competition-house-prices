@@ -38,12 +38,14 @@ house_pred$Fireplaces <- as.numeric(house_pred$Fireplaces > 0)
 # Normalizing some Data
 house_train$QualNorm <- (OverallQual - mean(OverallQual))/sd(OverallQual)
 house_train$GrLivAreaNorm <- (GrLivArea - mean(GrLivArea))/sd(GrLivArea)
+house_train$LotNorm <- (LotArea - mean(LotArea))/sd(LotArea)
 house_pred$QualNorm <- (house_pred$OverallQual - mean(house_pred$OverallQual))/sd(house_pred$OverallQual)
 house_pred$GrLivAreaNorm <- (house_pred$GrLivArea - mean(house_pred$GrLivArea))/sd(house_pred$GrLivArea)
+house_pred$LotNorm <- (house_pred$LotArea - mean(house_pred$LotArea))/sd(house_pred$LotArea)
 
 # testing with normalized data
-norm_train_sub <- select(house_train, QualNorm, GrLivAreaNorm, Neighborhood, SalePrice)
-norm_test_sub <- select(house_pred, QualNorm, GrLivAreaNorm, Neighborhood)
+norm_train_sub <- select(house_train, QualNorm, GrLivAreaNorm, LotNorm, Neighborhood, SalePrice)
+norm_test_sub <- select(house_pred, QualNorm, GrLivAreaNorm, LotNorm, Neighborhood)
 norm_output <- data.frame(testing, knn(norm_train_sub, norm_test_sub))
 
 # Below are some things for testing out the model with CV

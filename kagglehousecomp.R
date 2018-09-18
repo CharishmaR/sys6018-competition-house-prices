@@ -14,57 +14,12 @@ new_train <- logical()
 new_pred <- logical()
 
 # adding a column that states whether a house is considered "new" (built after 2000) or not
-for (i in 1:nrow(house_train)) {
-  if (house_train[i, "YearBuilt"] >= 2000) {
-    new_train[i] = TRUE
-  }
-  else {
-    new_train[i] = FALSE
-  }
-}
-
-for (i in 1:nrow(house_pred)) {
-  if (house_pred[i, "YearBuilt"] >= 2000) {
-    new_pred[i] = TRUE
-  }
-  else {
-    new_pred[i] = FALSE
-  }
-}
-
-house_train$New <- new_train
-house_pred$New <- new_pred
-
-house_train$New <- factor(house_train$New)
-house_pred$New <- factor(house_pred$New)
-
-op_train <- logical()
-op_pred <- logical()
+house_train$New <- as.numeric(house_train$YearBuilt > 2000 )
+house_pred$New <- as.numeric(house_pred$YearBuilt > 2000)
 
 # adding a column that states whether a house has a porch or not
-for (i in 1:nrow(house_train)) {
-  if (house_train[i, "OpenPorchSF"] > 0) {
-    op_train[i] = TRUE
-  }
-  else {
-    op_train[i] = FALSE
-  }
-}
-
-for (i in 1:nrow(house_pred)) {
-  if (house_pred[i, "OpenPorchSF"] > 0) {
-    op_pred[i] = TRUE
-  }
-  else {
-    op_pred[i] = FALSE
-  }
-}
-
-house_train$HasOpenPorch <- op_train
-house_pred$HasOpenPorch <- op_pred
-
-house_train$HasOpenPorch <- factor(house_train$HasOpenPorch)
-house_pred$HasOpenPorch <- factor(house_pred$HasOpenPorch)
+house_train$HasOpenPorch <- as.numeric(house_train$OpenPorchSF > 0)
+house_pred$HasOpenPorch <- as.numeric(house_pred$OpenPorchSF > 0)
 
 # adding a column that states whether a house has a basement or not
 house_train$isBasement <- as.numeric(house_train$TotalBsmtSF > 0)

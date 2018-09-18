@@ -2,8 +2,6 @@ library(readr)
 library(dplyr) 
 library(caret)
 
-setwd("/home/dell/Desktop/MSDS/Fall/data mining (SYS)/all")
-
 # Read in data
 house_train <- read_csv("train.csv")
 house_pred <- read_csv("test.csv")
@@ -40,19 +38,8 @@ house_pred$Fireplaces <- as.numeric(house_pred$Fireplaces > 0)
 # Normalizing some Data
 house_train$QualNorm <- (OverallQual - mean(OverallQual))/sd(OverallQual)
 house_train$GrLivAreaNorm <- (GrLivArea - mean(GrLivArea))/sd(GrLivArea)
-# house_train$OpenPorchNorm <- as.numeric(OpenPorchSF > 0)
-# house_train$PoolNorm <- as.numeric(PoolArea > 0)
-# house_train$GarageNorm <- GarageArea/mean(GarageArea)
-# house_train$BsmtNorm <- TotalBsmtSF/mean(TotalBsmtSF)
-# house_train$new_old <- as.numeric(YearBuilt > 1995)
-# house_train$LotAreaNorm <- LotArea/mean(LotArea)
-
 house_pred$QualNorm <- (house_pred$OverallQual - mean(house_pred$OverallQual))/sd(house_pred$OverallQual)
 house_pred$GrLivAreaNorm <- (house_pred$GrLivArea - mean(house_pred$GrLivArea))/sd(house_pred$GrLivArea)
-# house_pred$GarageNorm <- house_pred$GarageArea/mean(house_pred$GarageArea)
-# house_pred$BsmtNorm <- house_pred$TotalBsmtSF/mean(house_pred$TotalBsmtSF)
-# house_pred$BsmtNorm <- house_pred$LotArea/mean(house_pred$LotArea)
-# house_pred$new_old <-  as.numeric(house_pred$YearBuilt > 1995)
 
 # testing with normalized data
 norm_train_sub <- select(house_train, QualNorm, GrLivAreaNorm, Neighborhood, SalePrice)

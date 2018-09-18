@@ -5,8 +5,8 @@
 # https://www.kaggle.com/c/house-prices-advanced-regression-techniques/overview
 
 Current Stage: 
-- ran KNN with selected predictor variables (same variables as in parametric model)
-- result submitted to Kaggle; score: 0.25130
+- ran KNN with normalized variables OverallQual and GrLivArea, subsetting by neighborhood
+- result submitted to Kaggle; score: 0.19104
 
 Questions to Ponder: 
 - any suggestions / help with data cleaning and / or standardizing? 
